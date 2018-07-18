@@ -11,25 +11,23 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js'></script>
 </head>
 <body class="dark">
-# Mapas vectoriales offline en apps multiplataforma
+# Offline vector maps in multiplatform apps
 &nbsp;
 ### Oscar Fonts
 ### Micho García
 ### [geomati.co](http://geomati.co)
 
 
-
-Os voy a contar la historia de un desarrollo
-
-
-El subproducto resultante ha suscitado cierto interés
+I'm going to tell you the story of a development
 
 
-Nos dedicamos al *web mapping*, y hemos experimentado con las bondades de las *teselas vectoriales*
+The resulting by-product has aroused certain interest
 
 
-Hemos hecho algunos juguetes interesantes con la API de *Mapbox GL JS*
+We are dedicated to *web mapping*, and we have been exploring the benefits of *vector tiles*
 
+
+We have created some interesting toys with *Mapbox GL JS*
 
 ![Catastro](ejemplo-catastro.png)
 
@@ -40,68 +38,70 @@ Hemos hecho algunos juguetes interesantes con la API de *Mapbox GL JS*
 ![Trips](ejemplo-trips.gif)
 
 
-Nos piden una app de mapas offline y pensamos: *Vector Tiles*, ¡por supuesto!
+![Editor](ejemplo-editor.gif)
 
 
-# ¿Por qué?
+So we were asked to develop an App with offline maps and decided to use *Vector Tiles*
 
 
-# Pesan poco
-  * **Todo Barcelona** en OpenMapTiles son unos *12 MB*.
-  * **Medio millón de construcciones** del catastro son *37 MB*.
-  * **Todo Catalunya** a escala 1:25 000 son *350 MB*.
+# Why?
 
 
-# Te dan flexibilidad
-  * Esos 12 MB del Barcelona los puedo pintar al nivel de *zoom* que quiera, y con el *estilo* que quiera.
-  * Esas 500.000 construcciones las puedo pintar en *3D* en un movil, simbolizar al vuelo... ¡animarlas con música!
+# Small size
+  * **Barcelona city** from OpenMapTiles: *12 MB*.
+  * **Half a milion buildings** from cadastre: *37 MB*.
+  * **Catalonia (250x250km)** at scale 1:25 000: *350 MB*.
 
 
-Disponemos de una API en JS brutal:
-
-# Se llama *Mapbox GL JS*
-
-
-¿Hay mejor alternativa?
+# Flexibility
+  * We can draw data at any *zoom* level and apply any *style*.
+  * We can render those 500.000 constructions in *3D* on a mobile device, symbolize on the fly... even animate them with music!
 
 
-Decidididos a aprovechar la API de MapboxGL JS.
+We have an awesome Javasript API:
+
+# It's called *Mapbox GL JS*
+
+
+Is there any better alternative?
+
+
+So we are decided to take advantage of the MapboxGL JS API.
 
 
 ![MapboxGL](mapbox-gl.png)
 
 
-Al googlear "Mapbox GL JS Offline"
+If you google for "Mapbox GL JS Offline"
 
 
-## La respuesta oficial es
-  * No, **JS y offline no**.
-  * Usa las **variantes nativas** de MapboxGL.
-  * Si quieres multiplatforma prueba **MapboxGL React Native**.
+## The official answer is
+  * No, **JS and offline, not**.
+  * Use the **native tween libraries** from Mapbox.
+  * If you want multiplatform, use **MapboxGL React Native**.
 
 
-## Pero no me gusta
-  * Yo quiero mi API, no un tinglado por encima.
-  * Los wrappers de APIs los carga el Diablo (tm).
-  * Yo a lo mío: *Vanilla JS*.
+## But don't like it
+  * We want our JS API - code reuse, also in desktop browser.
+  * Let's try anyway and see what happens.
 
 
-# Primera iteración:
-* Mapbox GL JS tal cual en Cordova.
-* Todos los recursos on line.
+# First iteration:
+* Mapbox GL JS as is, inside Cordova.
+* All online resources are loaded.
 
-Y funciona sin más. Check.
-
-
-# Segunda iteración:
-* Movemos los recursos al movil (en `www`).
-* Esto es: `sprite`, `glyphs` y `tiles`.
-
-Hay pegas.
+It works out of the box. Check.
 
 
-# Pegas:
-* Las rutas no pueden ser relativas:
+# Second iteration:
+* Move online resources locally (inside `www`).
+* That is: `sprite`, `glyphs` y `tiles`.
+
+Problems.
+
+
+# Problems:
+* URLs have to be absolute, not relative:
 
     ```json
     "glyphs": "fonts/{fontstack}/{range}.pbf"
@@ -113,10 +113,10 @@ Hay pegas.
     "glyphs": "file:///www/fonts/{fontstack}/{range}.pbf"
     ```
 
-* Los sprites que empiezan por `file:///` no se cargan por un bug. Solución: [PR 4649](https://github.com/mapbox/mapbox-gl-js/pull/4649)
+* The sprite URLs starting with `file:///` won't load. It's a MapBox GL bug, so: [PR 4649](https://github.com/mapbox/mapbox-gl-js/pull/4649)
 
 
-# ¿y las teselas?
+# And what about tiles?
 
 
 # A lo bruto.
