@@ -119,9 +119,9 @@ Problems.
 # And what about tiles?
 
 
-# A lo bruto.
+# Brute force.
 
-Estructura de directorios:
+Directory structure following `{z}/{x}/{y}` pattern:
 
 ```
 0/0/0.pbf
@@ -131,113 +131,110 @@ Estructura de directorios:
 1/1/1.pbf
 ```
 
-Au, arreglado. Todos a casa.
+Solved! Can go home.
 
 
-# No tan rápido
+# Wait, not so quickly...
 
 * `18/262144/262144.pbf`
 
-Miles de directorios, con miles de teselas en cada uno, desparramados en `www`. Eso no hay quien lo gestione.
+Thousands of directrories, with thousands of files each, dumped on `www`. Can't manage.
 
 
-# Tercera iteración: *`.mbtiles`*
+# Third iteration: *`.mbtiles`*
 
 
-Un único fichero que contiene todas las teselas.
+Single file containing all tiles.
 
 
-## El problema ahora es:
+## So the problem boils down to:
 
-Cómo leer un *`.mbtiles`* desde Mapbox GL JS
-
-
-# Que se divide en dos subproblemas:
-
-* Primero, ¿cómo extraigo una tesela de un *`.mbtiles`*?
-* Y luego, ¿cómo se la paso a MapboxGL JS?
+How to access *`.mbtiles`* contents from Mapbox GL JS
 
 
-# ¿cómo extraigo una tesela de un *`.mbtiles`*?
+# Which can be split in two sub-problems:
+
+* First, how do we read a tile from an *`.mbtiles`*?
+* And then, how do we pass it to MapboxGL JS?
 
 
-# ¿Qué es un *`.mbtiles`*?
+# How do we read a tile from an *`.mbtiles`*?
 
 
-### Una BDD SQLite con una tabla:
-"`z`", "`x`", "`y`", "`tesela`".
+# What is an *`.mbtiles`*
 
 
-Muy fácil:
-
-* Googlear "Cordova SQLite Plugin".
-* Existen plugins varios.
-* Este nos sirve: [`cordova-sqlite-ext`](https://github.com/litehelpers/cordova-sqlite-ext).
+### It's just an SQLite database with a table with columns:
+"`z`", "`x`", "`y`", "`tile_contents`".
 
 
-Ya podemos recuperar una tesela `pbf` y la tenemos en un objeto JS.
+Piece of cake:
+
+* Google for "Cordova SQLite Plugin".
+* There are a handful of plugins.
+* It needs to read blobs.
+* This fits: [`cordova-sqlite-ext`](https://github.com/litehelpers/cordova-sqlite-ext).
 
 
-### La segunda parte del problema:
-¿cómo se la pasamos a MapboxGL JS?
+Now we have the tile contents as a JS object.
 
 
-* La librería sólo sabe pedir teselas a URLs.
-* Hay quienes han montado un servidor HTTP local embebido en la App.
+### Second half of the problem:
+How do we pass it to MapboxGL JS?
 
 
-Otros hemos modificado la librería MapboxGL JS.
+* The Mapbox library only knows how to get tiles from URLs (Ajax).
+* There are some solutions that start an embedded local HTTP server, but...
+
+
+We have modified the MapboxGL JS library.
 
 
 ![Munch](munch.jpg)
 
 
-No es para tanto
+Not that complex
 
 
-Reescribir un método "`loadTile`" para que donde dice "AJAX" diga "SQL"
+Just override a "`loadTile`" method and write a "SELECT WHERE" where it said "AJAX"
 
 
-Y reempaquetar
+And package
 
 
 ![Ciencia](ciencia.jpg)
 
 
-(sí, el infierno está en los detalles)
+(well, the programer's hell is hidden where you less expected)
 
 
-Aprovechamos para encapsular la ñapa de las URLs absolutas (véase segunda iteración)
+We also encapsulated the problem of absolute URLs (see second iteration)
 
 
-Y convertimos todo eso en una librería reutilizable.
+And published the results as a reusable library.
 
 
-### Apps en Play Store
-(no son nuestras)
+### Sample app: "Guimaraes Offline"
 
-* [OpenMapTiles](https://play.google.com/store/apps/details?id=com.klokantech.osm2vectortile)
-* [Catalunya Offline](https://play.google.com/store/apps/details?id=com.icgc.catoffline)
+[Download APK](guimaraes-offline.apk)
 
-
-Fin.
+![Screenshot](guimaraes-offline.jpg)
 
 
-¡No tan rápido amigo!
+That's it.
 
 
-Show me the code.
+Wait - hold a second!
 
 
-# *SHOW ME THE F***ING CODE!!!*
-que-esto-es-el-SIG-Libre
+Show me the code!!!
 
 
 [https://github.com/oscarfonts/mapbox-gl-cordova-offline](https://github.com/oscarfonts/mapbox-gl-cordova-offline)
 
 
-### Vale.
-# ¿Y cómo se usa?
+### OK, now:
+# How do you use it?
 
 
 #### `Map`
