@@ -16,15 +16,17 @@
 ### Oscar Fonts
 ### Micho García
 ### [geomati.co](http://geomati.co)
+&nbsp;
+http://fonts.cat/foss4ge2018
 
 
 I'm going to tell you the story of a development
 
 
-The resulting by-product has aroused certain interest
+The resulting by-product has attracted some interest
 
 
-We are dedicated to *web mapping*, and we have been exploring the benefits of *vector tiles*
+We are dedicated to *web mapping*, and recently have been exploring the potential of *vector tiles*
 
 
 We have created some interesting toys with *Mapbox GL JS*
@@ -41,7 +43,7 @@ We have created some interesting toys with *Mapbox GL JS*
 ![Editor](ejemplo-editor.gif)
 
 
-So we were asked to develop an App with offline maps and decided to use *Vector Tiles*
+So we were asked to develop an App with offline maps and wanted to use *Vector Tiles*
 
 
 # Why?
@@ -49,13 +51,13 @@ So we were asked to develop an App with offline maps and decided to use *Vector 
 
 # Small size
   * **Barcelona city** from OpenMapTiles: *12 MB*.
-  * **Half a milion buildings** from cadastre: *37 MB*.
-  * **Catalonia (250x250km)** at scale 1:25 000: *350 MB*.
+  * **Half a milion buildings** from Spanish cadastre: *37 MB*.
+  * Official **Catalonia (~250x250km)** 1:25 000 base cartography: *350 MB*.
 
 
 # Flexibility
   * We can draw data at any *zoom* level and apply any *style*.
-  * We can render those 500.000 constructions in *3D* on a mobile device, symbolize on the fly... even animate them with music!
+  * We can render those 500.000 cadastre buildings in *3D* on a mobile device, symbolize on the fly... even animate them with music!
 
 
 We have an awesome Javasript API:
@@ -76,28 +78,28 @@ If you google for "Mapbox GL JS Offline"
 
 
 ## The official answer is
-  * No, **JS and offline, not**.
+  * No, not **JS *and* offline**.
   * Use the **native tween libraries** from Mapbox.
   * If you want multiplatform, use **MapboxGL React Native**.
 
 
-## But don't like it
-  * We want our JS API - code reuse, also in desktop browser.
+## But didn't fit our context
+  * We want to keep the pure JS API: code reuse, support browser.
   * Let's try anyway and see what happens.
 
 
 # First iteration:
 * Mapbox GL JS as is, inside Cordova.
-* All online resources are loaded.
+* All online resources are loaded flawlessly.
 
-It works out of the box. Check.
+It works out of the box. *Check*.
 
 
 # Second iteration:
 * Move online resources locally (inside `www`).
-* That is: `sprite`, `glyphs` y `tiles`.
+* That is: `sprite`, `glyphs` and `tiles`.
 
-Problems.
+Problems. As expected.
 
 
 # Problems:
@@ -113,7 +115,7 @@ Problems.
     "glyphs": "file:///www/fonts/{fontstack}/{range}.pbf"
     ```
 
-* The sprite URLs starting with `file:///` won't load. It's a MapBox GL bug, so: [PR 4649](https://github.com/mapbox/mapbox-gl-js/pull/4649)
+* The sprite URLs starting with `file:///` won't load. It was a MapBox GL bug, so: [PR 4649](https://github.com/mapbox/mapbox-gl-js/pull/4649)
 
 
 # And what about tiles?
@@ -173,7 +175,7 @@ Piece of cake:
 * Google for "Cordova SQLite Plugin".
 * There are a handful of plugins.
 * It needs to read blobs.
-* This fits: [`cordova-sqlite-ext`](https://github.com/litehelpers/cordova-sqlite-ext).
+* This one fits: [`cordova-sqlite-ext`](https://github.com/litehelpers/cordova-sqlite-ext).
 
 
 Now we have the tile contents as a JS object.
@@ -184,10 +186,10 @@ How do we pass it to MapboxGL JS?
 
 
 * The Mapbox library only knows how to get tiles from URLs (Ajax).
-* There are some solutions that start an embedded local HTTP server, but...
+* There are some solutions that run an embedded local HTTP server, but...
 
 
-We have modified the MapboxGL JS library.
+We decided to adapt the MapboxGL JS library.
 
 
 ![Munch](munch.jpg)
@@ -196,10 +198,10 @@ We have modified the MapboxGL JS library.
 Not that complex
 
 
-Just override a "`loadTile`" method and write a "SELECT WHERE" where it said "AJAX"
+Just override a "`loadTile`" method and write *SQL* where it called *AJAX*
 
 
-And package
+And package it
 
 
 ![Ciencia](ciencia.jpg)
@@ -218,13 +220,14 @@ And published the results as a reusable library.
 
 [Download APK](guimaraes-offline.apk)
 
+
 ![Screenshot](guimaraes-offline.jpg)
 
 
 That's it.
 
 
-Wait - hold a second!
+Hold a second!
 
 
 Show me the code!!!
@@ -233,8 +236,8 @@ Show me the code!!!
 [https://github.com/oscarfonts/mapbox-gl-cordova-offline](https://github.com/oscarfonts/mapbox-gl-cordova-offline)
 
 
-### OK, now:
-# How do you use it?
+### OK. Now:
+# How do we use it?
 
 
 #### `Map`
@@ -291,24 +294,28 @@ new mapboxgl.OfflineMap({
 ```
 
 
-## Mejoras a la vista
+## Potential improvements
 
-* Soportar *teselas raster* (png, jpeg).
-* Mejor gestión del fichero *`.mbtiles`*.
-* Mantener compatibilidad con futuras versiones de Mapbox GL.
-&nbsp;
-(contrátanos *♥*)
+* Support *image tiles* (png, jpeg).
+* More flexible handling of *`.mbtiles`* file.
+* Keep maintaining compatibility with future Mapbox GL versions.
+
+
+# Bonus
+[Working with Vector Tiles](http://geoinquiets.github.io/taller-vt) workshop materials (in Spanish)
 
 
 <small>
 Oscar Fonts
+<br/>
 *&lt;oscar.fonts@geomati.co>*
 <br/>
 Micho García
+<br/>
 *&lt;micho.garcia@geomati.co>*
 </small>
-<br/>
-http://fonts.cat/siglibre2018
+&nbsp;
+http://fonts.cat/foss4ge2018
 
 
 </body>
